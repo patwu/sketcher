@@ -8,7 +8,7 @@ f = open("classes.txt","r")
 classes = f.readlines()
 f.close()
 classes = [c.replace('\n','').replace(' ','_') for c in classes]
-classes=classes[:2]
+classes=classes[:30]
 data=[]
 for i,c in enumerate(classes):
     filename='data/%s.npy'%c
@@ -17,9 +17,9 @@ for i,c in enumerate(classes):
     for d in data_bundle:
         data.append((d/255.,i))
 
-model=CNN(28,28,n_output=2)
+model=CNN(28,28,n_output=30)
 all_idx=range(len(data))
-for n_step in range(100):
+for n_step in range(3000):
     batch_x=[]
     batch_y=[]
     idx=np.random.choice(all_idx,32)
