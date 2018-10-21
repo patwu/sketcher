@@ -8,6 +8,7 @@ max_step=5000
 batch_size=32
 n_sample_in_train=1000
 n_sample_in_test=50
+n_channel=16
 
 f = open("classes.txt","r")
 classes = f.readlines()
@@ -25,7 +26,7 @@ for i,c in enumerate(classes):
     for d in data_bundle[:n_sample_in_train]:
         train_data.append((d/255.,i))
 
-model=CNN(28,28,n_output=n_class)
+model=CNN(28,28,n_channel=n_channel,n_output=n_class)
 all_idx=range(len(train_data))
 for n_step in range(max_step):
     batch_x=[]
