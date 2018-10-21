@@ -1,6 +1,8 @@
 
 import tensorflow as tf
 import numpy as np
+import shutil
+import os
 
 class CNN(object):
 
@@ -39,10 +41,9 @@ class CNN(object):
         self.loss_step=loss=self.loss(logit,y)
 
         self.prob_step=pred
-        print self.prob_step
         self.pred_step=tf.argmax(pred,axis=1)
 
-        opt = tf.train.AdamOptimizer()
+        opt = tf.train.GradientDescentOptimizer(0.1)
         self.train_step=opt.minimize(loss, global_step=global_step)
        
         self.sess = tf.Session()
@@ -60,13 +61,13 @@ class CNN(object):
         return pred,loss
 
     def predict(self,x):
-        x=np.reshape(np.asarray(x,dtype=np.float32),(1,self.h,self.w,1))
-
+        x=np.expand_dims(np.asarray(x,dtype=np.float32),3)
         feed = {self.x:x}
         pred,prob=self.sess.run([self.pred_step,self.prob_step], feed_dict=feed)
-        return pred[0],prob[0]
+        return pred,prob
        
     def save(self,path):
-#        self.saver.save(self.sess,path,global_step=self.global_step)
+        if os.path.exists(path):
+            shutil.rmtree(path)  
         tf.saved_model.simple_save(self.sess,path,inputs={"x":self.x},outputs={"pred_y":self.prob_step})
         
