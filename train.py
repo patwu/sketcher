@@ -14,7 +14,7 @@ f = open("classes.txt","r")
 classes = f.readlines()
 f.close()
 classes = [c.replace('\n','').replace(' ','_') for c in classes]
-classes = classes[:30]
+classes = classes[:n_class]
 train_data=[]
 test_data=[]
 for i,c in enumerate(classes):
