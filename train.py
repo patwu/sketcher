@@ -33,6 +33,7 @@ for n_step in range(max_step):
     batch_y=[]
     idx=np.random.choice(all_idx,batch_size)
     for i in idx:
+        #add your data augmentation to train_data[i][0] here
         batch_x.append(train_data[i][0])
         batch_y.append(train_data[i][1])
     
