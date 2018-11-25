@@ -1,7 +1,36 @@
-from PIL import Image
+from PIL import Image as Img
 import numpy as np
 
 from cnn import CNN as CNN
+
+def rot90(img,n):
+    rot_img=np.zeros((28,28))
+    for t in range(n):
+        for i in range(28):
+            for j in range(28):
+                rot_img[27-j][i]=img[i][j]
+        img=rot_img
+    return rot_img
+
+def flip(img):
+    flip_img=np.zeros((28,28))
+    for i in range(28):
+        for j in range(28):
+            flip_img[i][27-j]=img[i][j]
+    return flip_img
+
+def crop(img,x,y):
+    crop_img=np.zeros((28,28))
+    for i in range(28):
+        for j in range(28):
+            if 0<i+x<28 and 0<j+y<28:
+                crop_img[i,j]=img[i+x,j+y]
+    return crop_img
+
+def save(img,name='tmp.jpg'):
+    dd=np.asarray(img*255,dtype='uint8')
+    pic=Img.fromarray(dd)
+    pic.save(name)
 
 n_class=30
 max_step=5000
@@ -34,7 +63,11 @@ for n_step in range(max_step):
     idx=np.random.choice(all_idx,batch_size)
     for i in idx:
         #add your data augmentation to train_data[i][0] here
-        batch_x.append(train_data[i][0])
+        img=train_data[i][0]
+        if True or np.random.randint(2)==0:
+            img=flip(img)
+        img=crop(img,np.random.randint(10)-5,np.random.randint(10)-5)
+        batch_x.append(img)
         batch_y.append(train_data[i][1])
     
     _,loss=model.train(batch_x,batch_y)   
